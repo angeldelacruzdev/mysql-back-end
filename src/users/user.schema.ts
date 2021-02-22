@@ -36,8 +36,9 @@ export class User {
 }
 
 export const UserSchema = new EntitySchema<User>({
-  name: 'users',
+  name: 'User',
   target: User,
+  tableName:'users',
   columns: {
     id: {
       type: 'int',

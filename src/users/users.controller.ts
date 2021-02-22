@@ -4,9 +4,12 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { User } from './users.interface';
 import { UsersService } from './users.service';
@@ -16,27 +19,31 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+  async findAll(): Promise<User[]> {
+    return await this.usersService.findAll();
   }
 
   @Post()
   async create(@Body() createDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createDto);
+    return await this.usersService.create(createDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.usersService.findOne(id);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    this.usersService.update(id, updateUserDto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    await this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return `Delete or update access opti    on to false ${id}`;
+  async remove(@Param('id', ParseIntPipe) id: number, @Req() request: Request) {
+    const { isActive } = request.body;
+    await this.usersService.delete(id, isActive);
   }
 }
