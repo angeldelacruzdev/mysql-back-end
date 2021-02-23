@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserSchema, User } from './users/user.schema';
 import { Connection } from 'typeorm';
+import { UsersModule } from './users/users.module';
 
 // Create database with name: citas_medicas
 @Module({
